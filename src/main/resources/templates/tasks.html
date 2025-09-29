@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>My To-Do List</title>
+</head>
+<body>
+    <h1>Welcome, <span sec:authentication="name">User</span>!</h1>
+    
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+    
+    <hr/>
+    
+    <h2>Add a New Task</h2>
+    <form th:action="@{/tasks/add}" th:object="${newTask}" method="post">
+        <label>Description: <input type="text" th:field="*{description}" required /></label>
+        <label>Time: <input type="datetime-local" th:field="*{targetTime}" required /></label>
+        <button type="submit">Add Task</button>
+    </form>
+    
+    <hr/>
+    
+    <h2>Your Tasks</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Target Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="task : ${tasks}">
+                <td th:text="${task.description}">Task description...</td>
+                <td th:text="${#temporals.format(task.targetTime, 'yyyy-MM-dd HH:mm')}">Time...</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
